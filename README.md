@@ -22,6 +22,20 @@ If you forgot to download the file, or have a new version, you can import it sep
 
 
 
+Prerequisites
+-------------
+
+* postgresql 9.3 or later, postgis
+* php 7.0 or later
+* unzip
+* dos2unix
+	
+With Ubuntu 18:
+
+    apt-get install -y postgresql-server-dev-10 postgresql-10-postgis-2.4 php \
+                       unzip dos2unix
+
+
 Converting Code-Point Open data
 -------------------------------
 
