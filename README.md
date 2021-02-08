@@ -39,7 +39,7 @@ With Ubuntu 18:
 Converting Code-Point Open data
 -------------------------------
 
-1. Download from [Code-Point® Open](https://osdatahub.os.uk/downloads/open/CodePointOpen).
+1. Download from [Code-Point® Open](https://osdatahub.os.uk/downloads/open/CodePointOpen) (select 'CSV').
 
 2. `unzip codepo_gb.zip`
 
@@ -64,8 +64,9 @@ Converting Code-Point Open data
         createdb $DBNAME
         echo 'CREATE EXTENSION postgis' | psql $DBNAME
 
-        cat data/gb_postcode_table.sql | psql $DBNAME      
-        cat codepo_gb/Data/CSV/*.csv | ./data-sources/gb-postcodes/convert_codepoint.php | psql $DBNAME
+        wget -O /tmp/gb_postcode_table.sql https://raw.githubusercontent.com/osm-search/Nominatim/master/data/gb_postcode_table.sql
+        cat /tmp/gb_postcode_table.sql | psql $DBNAME      
+        cat codepo_gb/Data/CSV/*.csv | ./convert_codepoint.php | psql $DBNAME
         cat codepo_gb/Doc/licence.txt | iconv -f iso-8859-1 -t utf-8 | dos2unix | sed 's/^/-- /g' > gb_postcode_data.sql
         pg_dump -a -t gb_postcode $DBNAME | grep -v '^--' >> gb_postcode_data.sql
       
