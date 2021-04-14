@@ -1,12 +1,15 @@
 GB Postcode data for Nominatim
 ==============================
 
-The Nominatim server [importing instructions](https://www.nominatim.org/release-docs/latest/admin/Import-and-Update/) allow optionally download [`gb_postcode_data.sql.gz`](https://www.nominatim.org/data/gb_postcode_data.sql.gz). This document explains how the file gets created. Data is updates several times per year.
+The Nominatim server [import instructions](https://www.nominatim.org/release-docs/latest/admin/Import/)
+allow optionally download [`gb_postcode_data.sql.gz`](https://www.nominatim.org/data/gb_postcode_data.sql.gz).
+This document explains how the file gets created. Data is updated several times per year.
 
 
 GB vs UK
 --------
-GB (Great Britain) is more correct as the Ordnance Survey dataset doesn't contain postcodes from Northern Ireland.
+GB (Great Britain) is more correct as the Ordnance Survey dataset doesn't contain postcodes from Northern
+Ireland.
 
 
 Importing separately after the initial import
@@ -16,64 +19,79 @@ If you forgot to download the file, or have a new version, you can import it sep
 
 1. Import the downloaded `gb_postcode_data.sql.gz` file.
 
-2. Run the SQL query `SELECT count(getorcreate_postcode_id(postcode)) FROM gb_postcode;`. This will update the search index.
+2. Run the SQL query `SELECT count(getorcreate_postcode_id(postcode)) FROM gb_postcode;`. This
+   will update the search index.
 
-3. Run `utils/setup.php --calculate-postcodes` from the build directory. This will copy data form the `gb_postcode` table to the `location_postcodes` table.
+3. Run `utils/setup.php --calculate-postcodes` from the build directory. This will copy data
+   form the `gb_postcode` table to the `location_postcodes` table.
 
-
-
-Prerequisites
--------------
-
-* postgresql 9.3 or later, postgis
-* php 7.0 or later
-* unzip
-* dos2unix
-	
-With Ubuntu 18:
-
-    apt-get install -y postgresql-server-dev-10 postgresql-10-postgis-2.4 php \
-                       unzip dos2unix
 
 
 Converting Code-Point Open data
 -------------------------------
 
-1. Download from [Code-Point® Open](https://osdatahub.os.uk/downloads/open/CodePointOpen) (select 'CSV').
+1. Download from [Code-Point® Open](https://osdatahub.os.uk/downloads/open/CodePointOpen)
+   data (select 'CSV').
 
-2. `unzip codepo_gb.zip`
+2. Extract the downloaded file.
 
-    Unpacked you'll see a directory of CSV files.
+        unzip codepo_gb.zip
+
+     You'll see a directory of CSV files.
 
         $ more codepo_gb/Data/CSV/n.csv
         "N1 0AA",10,530626,183961,"E92000001","E19000003","E18000007","","E09000019","E05000368"
         "N1 0AB",10,530559,183978,"E92000001","E19000003","E18000007","","E09000019","E05000368"
 
-    The coordinates are "Northings" and "Eastings" in [OSGB 1936](http://epsg.io/1314) projection. They can be projected to WGS84 like this
+    The coordinates are "Northings" and "Eastings" in [OSGB 1936](http://epsg.io/1314)
+    projection. They can be projected to WGS84 like this
 
         SELECT ST_AsText(ST_Transform(ST_SetSRID('POINT(530626 183961)'::geometry,27700), 4326));
         POINT(-0.117872733220225 51.5394424719303)
 
-    [-0.117872733220225 51.5394424719303 on OSM map](https://www.openstreetmap.org/?mlon=-0.117872733220225&mlat=51.5394424719303&zoom=16)
+    [Position on OpenStreetMap](https://osm.org/?mlon=-0.117872&mlat=51.539442)
 
 
+3. Create a working directory and place the downloaded files in there
 
-3. Create database, import CSV files, add geometry column, dump into file
+        mkdir workdir
+        cp codepo_gb/Data/CSV/*.csv workdir
+        cp codepo_gb/Doc/licence.txt workdir
 
-        DBNAME=create_gb_postcode_file
-        createdb $DBNAME
-        echo 'CREATE EXTENSION postgis' | psql $DBNAME
+4. Convert CSV files into a .sql database dump file
 
-        wget -O /tmp/gb_postcode_table.sql https://raw.githubusercontent.com/osm-search/Nominatim/master/data/gb_postcode_table.sql
-        cat /tmp/gb_postcode_table.sql | psql $DBNAME      
-        cat codepo_gb/Data/CSV/*.csv | ./convert_codepoint.php | psql $DBNAME
-        cat codepo_gb/Doc/licence.txt | iconv -f iso-8859-1 -t utf-8 | dos2unix | sed 's/^/-- /g' > gb_postcode_data.sql
-        pg_dump -a -t gb_postcode $DBNAME | grep -v '^--' >> gb_postcode_data.sql
-      
-        gzip -9 -f gb_postcode_data.sql
-        ls -lah gb_postcode_data.*
-        # dropdb $DBNAME
+    That includes creating a database, table, import the files, add geometry column,
+    dump the file, delete the database.
 
+    Option A:
+
+    * Install Postgresql and other required packages, e.g. on Ubuntu
+
+            apt-get install -y postgresql-12-postgis-3 php unzip dos2unix
+       
+    * Edit the `convert.sh` script with your database user name and paths and run the script
+
+    Option B:
+    
+    * Use Docker
+    
+            docker build --tag gb-postcode-data-convert .
+
+            docker run --detach \
+                       --name gb-postcode-data-converter \
+                       --env POSTGRES_PASSWORD=cr \
+                       --volume $PWD/workdir:/data \
+                       gb-postcode-data-convert
+
+            docker exec -t gb-postcode-data-converter /app/convert.sh
+
+5. Now you have a new file `gb_postcode_data.sql.gz` in your working directory.
+
+6. Cleanup
+
+            docker container rm --force gb-postcode-data-converter
+            rm -r workdir
+    
 
 License
 -------
