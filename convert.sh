@@ -28,18 +28,21 @@ cat $WORKDIR/*.csv | ./convert_codepoint.php | psql --user $POSTGRES_USER $POSTG
 
 
 echo
-echo "* Dump database table into file"
+echo "* Dump database table into files"
 echo '' > gb_postcode_data.sql
 if [[ -e $WORKDIR/licence.txt ]]; then
   cat $WORKDIR/licence.txt | iconv -f iso-8859-1 -t utf-8 | dos2unix | sed 's/^/-- /g' >> $WORKDIR/gb_postcode_data.sql
 fi
+echo "  * gb_postcode_data.sql"
 pg_dump --user $POSTGRES_USER --dbname $POSTGRES_DBNAME --table gb_postcode --data-only | grep -v '^--' >> $WORKDIR/gb_postcode_data.sql
-
+echo "  * gb_postcodes.csv"
+psql --user $POSTGRES_USER --dbname $POSTGRES_DBNAME -t -A -F"," -c 'SELECT postcode, ST_Y(geometry), ST_X(geometry) FROM gb_postcode' > $WORKDIR/gb_postcodes.csv
 
 echo
-echo "* Compress output file"
+echo "* Compress output files"
 gzip -9 -f $WORKDIR/gb_postcode_data.sql
-ls -l $WORKDIR/gb_postcode_data.*
+gzip -9 -f $WORKDIR/gb_postcodes.csv
+ls -l $WORKDIR/gb_*.*
 
 
 echo
