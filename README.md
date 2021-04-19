@@ -79,13 +79,13 @@ Converting Code-Point Open data
 
             docker run --detach \
                        --name gb-postcode-data-converter \
-                       --env POSTGRES_PASSWORD=cr \
+                       --env POSTGRES_PASSWORD=sEKr3tT \
                        --volume $PWD/workdir:/data \
                        gb-postcode-data-convert
 
             docker exec -t gb-postcode-data-converter /app/convert.sh
 
-5. Now you have a new file `gb_postcode_data.sql.gz` in your working directory.
+5. Now you have new files `gb_postcode_data.sql.gz` and `gb_postcodes.sql.gz` in your working directory.
 
 6. Cleanup
 
