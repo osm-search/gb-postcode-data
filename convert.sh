@@ -36,7 +36,7 @@ fi
 echo "  * gb_postcode_data.sql"
 pg_dump --user $POSTGRES_USER --dbname $POSTGRES_DBNAME --table gb_postcode --data-only | grep -v '^--' >> $WORKDIR/gb_postcode_data.sql
 echo "  * gb_postcodes.csv"
-psql --user $POSTGRES_USER --dbname $POSTGRES_DBNAME -A -F"," -c 'SELECT postcode, ST_Y(geometry) as latitude, ST_X(geometry) as longitude FROM gb_postcode' > $WORKDIR/gb_postcodes.csv
+psql --user $POSTGRES_USER --dbname $POSTGRES_DBNAME -A -F"," -c 'SELECT postcode, ST_Y(geometry) as y, ST_X(geometry) as x FROM gb_postcode' > $WORKDIR/gb_postcodes.csv
 
 echo
 echo "* Compress output files"
