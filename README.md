@@ -83,6 +83,8 @@ Converting Code-Point Open data
                        --volume $PWD/workdir:/data \
                        gb-postcode-data-convert
 
+            sleep 10 # wait for postgresql to be ready
+
             docker exec -t gb-postcode-data-converter /app/convert.sh
 
 5. Now you have new files `gb_postcode_data.sql.gz` and `gb_postcodes.sql.gz` in your working directory.
