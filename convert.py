@@ -44,6 +44,6 @@ for fieldname in in_filenames:
 
             csv_writer.writerow({
                 'postcode': row['postcode'],
-                'lat': latitude,
-                'lon': longitude 
+                'lat': '%0.5f' % latitude,
+                'lon': '%0.5f' % longitude 
             })
