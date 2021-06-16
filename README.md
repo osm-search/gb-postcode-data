@@ -5,7 +5,8 @@ The Nominatim server [import instructions](https://www.nominatim.org/release-doc
 allow optionally download `gb_postcodes.csv.gz`. This document explains how the file gets created. Data
 is updated several times per year.
 
-Note: Nominatim version 3.7 and earlier used database dump files (`gb_postcode_data.sql.gz`) instead.
+Note: Nominatim version 3.7 and earlier used database dump files (`gb_postcode_data.sql.gz`) instead. If
+you want to generate those check out the [`sql-file-generation` tag](https://github.com/osm-search/gb-postcode-data/tags).
 
 
 GB vs UK
