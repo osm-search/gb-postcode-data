@@ -11,7 +11,7 @@ from pyproj import Transformer
 ## CSV Input
 ##
 
-in_filenames = glob.glob('workdir/*.csv')
+in_filenames = glob.glob('Data/CSV/*.csv')
 
 # 10 columns but we only need the first 4
 in_fieldnames = ['postcode', 'positional_quality_indicator', 'eastings', 'northings']
