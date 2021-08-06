@@ -55,11 +55,10 @@ Creating the file
 2. Download source files
 
         ./download.sh
-        wget https://raw.githubusercontent.com/osm-uk/NI-Postcodes/main/data/NI-postcodes.csv
 
      You'll see a directory of CSV files.
 
-        cat Data/CSV/*.csv | wc -l
+        cat code_gb/Data/CSV/*.csv | wc -l
 
         more Data/CSV/n.csv
         "N1 0AA",10,530626,183961,"E92000001","E19000003","E18000007","","E09000019","E05000368"
@@ -81,7 +80,7 @@ Creating the file
 
 4. Cleanup source files
 
-        rm -r codepo_db.zip Data Doc NI-postcodes.csv
+        rm -r codepo_gb.zip codepo_gb NI-postcodes.csv
 
 License
 -------
