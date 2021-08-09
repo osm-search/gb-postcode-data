@@ -9,8 +9,8 @@ Older versions of Nominatim supported database dump files (`gb_postcode_data.sql
 you want to generate those check out the older [`sql-file-generation`](https://github.com/osm-search/gb-postcode-data/tags) tag of this repository.
 
 
-Data sources and license
-------------------------
+Data sources and licenses
+-------------------------
 
 Data consists of
 
@@ -69,12 +69,13 @@ Creating the file
 3. Convert data
 
         ./convert.py > gb_postcodes.csv
-        grep -v postcode NI-postcodes.csv >> gb_postcodes.csv
+        cp gb_postcodes.csv gb_and_ni_postcodes.csv
+        grep -v postcode NI-postcodes.csv >> gb_and_ni_postcodes.csv
 
         # expect about 1.7m
-        wc -l gb_postcodes.csv
+        wc -l gb_*postcodes.csv
 
-        gzip -9 gb_postcodes.csv
+        gzip -9 gb_*postcodes.csv
         # expect 13M
         ls -lah
 
