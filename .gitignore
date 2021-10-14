@@ -1,0 +1,7 @@
+# typical data input or output files
+codepo_gb/
+NI-postcodes.csv
+*.csv
+*.zip
+*.gz
+__pycache__

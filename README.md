@@ -79,7 +79,20 @@ Creating the file
         # expect 13M
         ls -lah
 
-4. Cleanup source files
+4. Compare to previous data
+
+        ./compare.py gb_postcodes.previous.csv gb_postcodes.csv
+        Read 1717777 postcodes from old file gb_postcodes.previous.csv
+        Read 1719485 postcodes from new file gb_postcodes.csv
+        Added: 3674 (0.214%)
+        Deleted: 1966 (0.114%)
+        Position moved: 68857 (4.005%)
+        Position moved more than 100 meters: 10517 (0.612%)
+        Position moved more than 1000 meters: 553 (0.032%)
+        Position moved more than 10000 meters: 16 (0.001%)
+        Average distance difference of all updates: 83.76 meters
+
+5. Cleanup source files
 
         rm -r codepo_gb.zip codepo_gb NI-postcodes.csv
 
