@@ -58,7 +58,8 @@ Creating the file
 
      You'll see a directory of CSV files.
 
-        cat code_gb/Data/CSV/*.csv | wc -l
+        cat codepo_gb/Data/CSV/*.csv | wc -l
+        # 1719485
 
         more Data/CSV/n.csv
         "N1 0AA",10,530626,183961,"E92000001","E19000003","E18000007","","E09000019","E05000368"
@@ -75,26 +76,32 @@ Creating the file
         # expect about 1.7m
         wc -l gb_*postcodes.csv
 
-        gzip -9 gb_*postcodes.csv
-        # expect 13M
-        ls -lah
-
 4. Compare to previous data
 
+        wget -O gb_postcodes.previous.csv.gz https://downloads.opencagedata.com/public/gb_postcodes.latest.csv.gz
+        gunzip -f gb_postcodes.previous.csv.gz
+
         ./compare.py gb_postcodes.previous.csv gb_postcodes.csv
-        Read 1717777 postcodes from old file gb_postcodes.previous.csv
-        Read 1719485 postcodes from new file gb_postcodes.csv
-        Added: 3674 (0.214%)
-        Deleted: 1966 (0.114%)
-        Position moved: 68857 (4.005%)
-        Position moved more than 100 meters: 10517 (0.612%)
-        Position moved more than 1000 meters: 553 (0.032%)
-        Position moved more than 10000 meters: 16 (0.001%)
-        Average distance difference of all updates: 83.76 meters
+        # Read 1717777 postcodes from old file gb_postcodes.previous.csv
+        # Read 1719485 postcodes from new file gb_postcodes.csv
+        # Added: 3674 (0.214%)
+        # Deleted: 1966 (0.114%)
+        # Position moved: 68857 (4.005%)
+        # Position moved more than 100 meters: 10517 (0.612%)
+        # Position moved more than 1000 meters: 553 (0.032%)
+        # Position moved more than 10000 meters: 16 (0.001%)
+        # Average distance difference of all updates: 83.76 meters
 
-5. Cleanup source files
+5. Compress output
 
-        rm -r codepo_gb.zip codepo_gb NI-postcodes.csv
+        gzip -9 -f gb_*postcodes.csv
+        ls -lah *.gz
+        # 14M gb_and_ni_postcodes.csv.gz
+        # 13M gb_postcodes.csv.gz
+
+6. Cleanup source files
+
+        rm -r codepo_gb.zip codepo_gb NI-postcodes.csv gb_postcodes.previous.csv
 
 License
 -------
