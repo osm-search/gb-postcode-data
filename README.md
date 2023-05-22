@@ -20,10 +20,11 @@ Data consists of
    for Great Britain, publishes the open dataset four times per year at
    https://osdatahub.os.uk/downloads/open/CodePointOpen
 
-2. About 15.000 Northern Ireland postcodes
+2. About 27.000 Northern Ireland postcodes
 
-        https://github.com/osm-uk/NI-Postcodes derived from Food Hygiene Ratings Scheme Data
-        sets.
+   https://github.com/osm-uk/NI-Postcodes derived from Food Hygiene Ratings Scheme Data sets.
+   The data set contains duplicates which `aggregate_ni.py` removes by calculating a center
+   point for each postcode. That leads to about 10.000 postcodes.
 
 Both are licensed under [Open Government Licence (v3)](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
