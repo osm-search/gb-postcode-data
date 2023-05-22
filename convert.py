@@ -45,7 +45,7 @@ for fieldname in in_filenames:
             postcode = normalize_postcode(row['postcode'])
 
             if not check_postcode(postcode):
-                print("invalid postcode '%s'" % postcode, File=sys.stderr)
+                print("invalid postcode '%s'" % postcode, file=sys.stderr)
                 continue
 
             csv_writer.writerow({

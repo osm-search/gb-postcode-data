@@ -70,8 +70,9 @@ Creating the file
 3. Convert data
 
         ./convert.py > gb_postcodes.csv
+        ./aggregate_ni.py > NI-postcodes-agg.csv
         cp gb_postcodes.csv gb_and_ni_postcodes.csv
-        grep -v postcode NI-postcodes.csv >> gb_and_ni_postcodes.csv
+        tail -n+2 NI-postcodes-agg.csv >> gb_and_ni_postcodes.csv
 
         # expect about 1.7m
         wc -l gb_*postcodes.csv
@@ -101,7 +102,7 @@ Creating the file
 
 6. Cleanup source files
 
-        rm -r codepo_gb.zip codepo_gb NI-postcodes.csv gb_postcodes.previous.csv
+        rm -r codepo_gb.zip codepo_gb NI-postcodes.csv NI-postcodes-agg.csv gb_postcodes.previous.csv
 
 License
 -------
