@@ -66,7 +66,6 @@ for postcode in postcodes_old:
         num_deleted += 1
 
 
-
 ######################################################################
 ## Output
 ##
@@ -96,5 +95,5 @@ print('Position moved more than 10000 meters: %d (%.3f%%)' % (
     num_moved_10000 / len(postcodes_new) * 100)
 )
 print('Average distance difference of all updates: %0.2f meters' % (
-    distance_differences / num_moved)
-)
+    distance_differences / num_moved if num_moved != 0 else 0
+))
