@@ -80,7 +80,7 @@ Creating the file
 
 4. Compare to previous data
 
-        wget -O gb_postcodes.previous.csv.gz https://downloads.opencagedata.com/public/gb_postcodes.latest.csv.gz
+        wget -O gb_postcodes.previous.csv.gz https://downloads.opencagedata.com/public/gb_postcodes/gb_postcodes.latest.csv.gz
         gunzip -f gb_postcodes.previous.csv.gz
 
         ./compare.py gb_postcodes.previous.csv gb_postcodes.csv
